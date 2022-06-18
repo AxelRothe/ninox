@@ -1,11 +1,12 @@
 {
-  "name": "ninox",
+  "name": "ninoxjs",
   "version": "1.0.0",
   "description": "a simple and fast wrapper for the Ninox REST API",
   "main": "index.js",
   "keywords": ["ninox","node","restful", "api", "rest"],
   "author": "Axel Rothe <hello@axelrothe.com>",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "axios": "^0.27.2"
   }

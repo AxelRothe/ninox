@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 /**
  * @class Ninox
@@ -60,17 +60,30 @@ class Ninox {
 
     /**
      * @example
-     * ninox.auth({ authKey: "xxxx-xxxx-xxxxx", team: "Team Name", database: "Database Name"});
+     * ninox.auth({
+     * 	authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
+     * 	team: "YOUR_TEAM_NAME",
+     * 	database: "YOUR_DATABASE_NAME",
+     * }).then(() => {
+     * 	console.log("Auth successful");
+     * 	ninox.getRecords('YOUR_TABLE_NAME').then(records => {
+     * 		console.log(records);
+     * 	})
+     * })
      *
      * @param options
      * @returns {Promise<Ninox>}
      */
     async auth(options) {
-        this.authKey = options.authKey || throw new Error("Auth key is required");
+        if (!options.authKey) throw new Error("authKey is required");
+        if (!options.team) throw new Error("team is required");
+        if (!options.database) throw new Error("database is required");
+
+        this.authKey = options.authKey;
         await this.#getTeams();
-        this.#getTeamByName(options.teamName || throw new Error("Team name is required"));
+        this.#getTeamByName(options.team);
         await this.#getDatabases();
-        this.#getDatabaseByName(options.databaseName || throw new Error("Database name is required"));
+        this.#getDatabaseByName(options.database);
         return this;
    }
 
@@ -109,11 +122,21 @@ class Ninox {
     }
 
     #getTeamByName(teamName) {
-        this.teamId = this.teams.find(i=>i.name === teamName).id || throw new Error("Team not found");
+        const team = this.teams.find(i=>i.name === teamName);
+        if (team) {
+            this.teamId = team.id;
+        } else {
+            throw new Error("Team not found");
+        }
     }
 
     #getDatabaseByName(databaseName) {
-        this.databaseId = this.databases.find(i=>i.name === databaseName).id || throw new Error("Database not found");
+        const database = this.databases.find(i=>i.name === databaseName);
+        if (database) {
+            this.databaseId = database.id;
+        } else {
+            throw new Error("Database not found");
+        }
     }
 
     /**
