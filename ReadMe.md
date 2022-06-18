@@ -22,9 +22,9 @@ ninox.auth({
     authKey: 'YOUR_AUTH_KEY',
     team: 'YOUR_TEAM_NAME',
     database: 'YOUR_DATABASE_NAME'
-}).getRecords('YOUR_TABLE_NAME', {
+}).getRecords('YOUR_TABLE_NAME', [{
 	name: 'John'
-}, ['name', 'age']).then(function(records) {
+}], ['name', 'age']).then(function(records) {
     console.log(records);
 });
 ```
@@ -40,9 +40,9 @@ Usage:
 ```javascript
 ninox.getRecords(
 	'YOUR_TABLE_NAME', // Table name
-    {
+    [{
         name: 'John' // Filter
-    },
+    }],
     ['name', 'age'] // Fields to retrieve
 );
 ```
