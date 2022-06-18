@@ -1,4 +1,4 @@
-![‘npm version’](http://img.shields.io/npm/v/ninox.svg?style=flat) ![‘downloads over month’](http://img.shields.io/npm/dm/ninox.svg?style=flat)
+![‘npm version’](http://img.shields.io/npm/v/ninoxjs.svg?style=flat) ![‘downloads over month’](http://img.shields.io/npm/dm/ninoxjs.svg?style=flat)
 
 ninox.js
 ========================
