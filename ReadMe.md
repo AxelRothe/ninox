@@ -38,13 +38,13 @@ Retrieves all Records from the Table that match the filters.
 
 Usage:
 ```javascript
-ninox.getRecords({
-    table: 'YOUR_TABLE_NAME',
-    filters: {
-        name: 'John'
+ninox.getRecords(
+	'YOUR_TABLE_NAME', // Table name
+    {
+        name: 'John' // Filter
     },
-    fields: ['name', 'age']
-});
+    ['name', 'age'] // Fields to retrieve
+);
 ```
 
 ### getRecord
