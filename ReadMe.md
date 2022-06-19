@@ -85,5 +85,5 @@ Deletes all Records from a table in the database (very slow, since it deletes al
 
 Usage:
 ```javascript
-ninox.deleteRecord("YOUR_TABLE_NAME", [123, 124, 125]);
+ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]);
 ```
