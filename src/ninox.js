@@ -301,9 +301,8 @@ class Ninox {
     async query(query) {
         if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
-        const result = await axios.post(
-            `https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/query`,
-            query,
+        const result = await axios.get(
+            `https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/query?query=${encodeURIComponent(query)}`,
             {
                 headers: {
                     "Content-Type": "application/json",
