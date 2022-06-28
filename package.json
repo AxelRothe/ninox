@@ -1,6 +1,6 @@
 {
   "name": "ninoxjs",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "a simple and fast wrapper for the Ninox REST API",
   "main": "index.js",
   "keywords": [
