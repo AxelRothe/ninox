@@ -303,7 +303,7 @@ class Ninox {
 
 		const result = await axios.post(
 			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/query`,
-			query,
+			encodeURIComponent(query),
 			{
 				headers: {
 					"Content-Type": "application/json",
