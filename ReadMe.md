@@ -5,7 +5,18 @@ ninox.js
 
 ## What is this?
 
-This is a simple JavaScript wrapper for Ninox API. This allows you to easily use Ninox API in your JavaScript code without needing to write REST API Calls.
+This is a lightweight JS utility library for the Ninox REST API. This allows you to easily use the REST API in your JavaScript app without needing to look up your library ids and team ids or handle data transformations.
+
+## What can I use it for?
+
+I personally used this code base to write endpoints for the following services:
+ - server for app payment and license management
+ - data analysis tools to analyse trends in data
+ - employee dashboards
+ - ticket systems
+ - and more
+
+I'm excited to see what you are going to create with these tools.
 
 ## Install
 
@@ -13,45 +24,91 @@ This is a simple JavaScript wrapper for Ninox API. This allows you to easily use
 npm install ninoxjs --save
 ```
 
-### Example
+#### CommonJS
+`const ninox = require('ninoxjs');`
+
+### Usage
+
+`ninox.auth(options)` must be called once before using the API.
 
 ```javascript
-const ninox = require('ninoxjs');
+const ninox = require('ninoxjs/index.cjs');
 
 ninox.auth({
-    authKey: 'YOUR_AUTH_KEY',
-    team: 'YOUR_TEAM_NAME',
-    database: 'YOUR_DATABASE_NAME'
-}).getRecords('YOUR_TABLE_NAME', [{
-	name: 'John'
-}], ['name', 'age']).then(function(records) {
-    console.log(records);
+	authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
+	team: "YOUR_TEAM_NAME",
+	database: "YOUR_DATABASE_NAME",
+}).then(() => {
+	console.log("Auth successful");
+	
+	ninox.getRecords('YOUR_TABLE_NAME').then(records => {
+		console.log(records);
+	})
+}).catch(err => {
+    console.log("Failed to connect to Ninox Cloud", err);
 });
 ```
 
-`auth()` must be called once before using the API. It returns a Promise that resolve to itself so you can chain commands.
+## Types
+
+### NinoxRecord
+
+```javascript
+     /**
+	 * @typedef {Object} NinoxRecord
+	 * @property {string} id - The id of the record
+	 * @property {Object} fields - The fields of the record
+	 *
+	 * @example
+	 * {
+	 *  id: 123,
+	 *  fields: {
+	 *      "Name": "My Deliverable",
+	 *      "Description": "This is a deliverable",
+	 *  },
+	 * }
+	 */
+```
 
 ## Available methods
 
 ### getRecords
-Retrieves all Records from the Table that match the filters.
+Retrieves all NinoxRecords from the Table that match the filters.
+
+Filters are always exact matches, use ninox.query to search with greater than, less than and other parameters.
 
 Usage:
 ```javascript
 ninox.getRecords(
 	'YOUR_TABLE_NAME', // Table name
-    [{
-        name: 'John' // Filter
-    }],
-    ['name', 'age'] // Fields to retrieve
+    {
+        "First Name": 'John', 
+        Age : 21,
+        "Last Name": 'Doe'
+    },
+    ['name', 'age'] // Fields to extract, leave undefined to extract all fields
 );
+
+// returns all NinoxRecords
+await ninox.getRecords('YOUR_TABLE_NAME').then(records => {
+    console.log(records);
+})
 ```
 
 ### getRecord
-Returns a record from a table by id
+Returns a NinoxRecord from a table by id
 
 Usage:
+
 ```javascript
+
+//returns a NinoxRecord with id 123 and trims the data to just the Age field
+ninox.getRecord("YOUR_TABLE_NAME", 123, ['Age']).then(function(record) {
+        console.log(record);
+    }
+)
+
+//returns a NinoxRecord with id 123 and all fields
 ninox.getRecord("YOUR_TABLE_NAME", 123).then(function(record) {
         console.log(record);
     }
@@ -59,10 +116,13 @@ ninox.getRecord("YOUR_TABLE_NAME", 123).then(function(record) {
 ```
 
 ### saveRecords
-Saves Records to a table in the database, omitting the id will create a new record, with the id will update the record
+Saves NinoxRecords to a table in the database, omitting the id will create a new NinoxRecord, with the id will update the NinoxRecord
 
 Usage:
+
 ```javascript
+
+//updates a NinoxRecord with id 1 with the data in the fields object
 ninox.saveRecords("YOUR_TABLE_NAME", [{
 	id: "1",
 	fields: {
@@ -70,20 +130,56 @@ ninox.saveRecords("YOUR_TABLE_NAME", [{
 		field2: "value2"
 	},
 }]);
+
+//creates a NinoxRecord with the data in the fields object
+ninox.saveRecords("YOUR_TABLE_NAME", [{
+	fields: {
+		field3: "value3",
+		field4: "value4"
+	},
+}]);
 ```
 
 ### deleteRecord
-Deletes Records from a table in the database.
+Deletes NinoxRecords from a table in the database.
 
 Usage:
 ```javascript
-ninox.deleteRecord("YOUR_TABLE_NAME", 123);
+ninox.deleteRecord("YOUR_TABLE_NAME", 123).then(function(record) {
+        console.log(record);
+    }
+)
 ```
 
 ### deleteRecords
-Deletes all Records from a table in the database (very slow, since it deletes all records with individual API calls).
+Deletes all NinoxRecords from a table in the database (very slow, since it deletes all NinoxRecords with individual API calls).
 
 Usage:
 ```javascript
-ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]);
+ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]).then(function(record) {
+        console.log(record);
+    }
+)
 ```
+### query
+Allows you to query the database directly with a NXScript, which can do greater than, less than and other functions like contain() etc.
+
+**note**: this doesn't allow you to modify the database directly, only read it. Also Ids returned via query() will carry their table prefix (e.g. "A36")
+
+Usage:
+```javascript
+let name = "John"
+let age = 21;
+n.query(`(select YOUR_TABLE_NAME['First Name'="${name}" and Age >= ${age}])`).then(function(result) {
+	console.log(result); //['A2','A7', 'A8']
+    const ids = result.map(r => r.replace(/\D/g,'')) //remove the table prefix);
+    
+	n.getRecords('YOUR_TABLE_NAME', ids).then(function(records) {
+		console.log(records);
+	})
+
+}).catch(function(err) {
+	console.log(err);
+});
+```
+
