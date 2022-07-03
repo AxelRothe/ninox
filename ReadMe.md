@@ -88,8 +88,8 @@ Usage:
 ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]);
 ```
 
-### deleteRecords
-Deletes all Records from a table in the database (very slow, since it deletes all records with individual API calls).
+### query
+Queries a standard NX query to the database. As far as I can tell, it only allows simple one line operations and variables or assiging of values to entries in a record.
 
 Usage:
 ```javascript
