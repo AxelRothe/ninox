@@ -8,12 +8,22 @@ class Ninox {
 
 	/**
 	 * @typedef {Object} NinoxRecord
-	 * @property {string} id - The id of the record
+	 * @property {number} id - The id of the record
+	 * @property {number} sequence - The sequence of the record
+	 * @property {string} createdAt - The date the record was created
+	 * @property {string} createdBy - The user that created the record
+	 * @property {string} modifiedAt - The date the record was updated
+	 * @property {string} modifiedBy - The user that updated the record
 	 * @property {Object} fields - The fields of the record
 	 *
 	 * @example
 	 * {
-	 *  id: 123,
+	 *  id: 6,
+	 *  sequence: 97,
+	 *  createdAt: '2022-06-28T19:35:01',
+	 *  createdBy: 'xxx',
+	 *  modifiedAt: '2022-07-02T12:34:39',
+	 *  modifiedBy: 'xxx',
 	 *  fields: {
 	 *      "Name": "My Deliverable",
 	 *      "Description": "This is a deliverable",
@@ -56,11 +66,14 @@ class Ninox {
 	 * @property {string} teamName - The name of the team to use
 	 * @property {string} databaseName - The name of the database to use
 	 * @property {string} authKey - The auth key for the API, can be found or created in the user account settings page of the ninox app
+	 *
+	 * @example
+	 * {
+	 * 	authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
+	 * 	team: "YOUR_TEAM_NAME",
+	 * 	database: "YOUR_DATABASE_NAME",
+	 * }
 	 */
-
-	constructor(axios) {
-		axios = axios;
-	}
 
 	/**
 	 * @example
@@ -282,7 +295,7 @@ class Ninox {
 	 *
 	 * @param table - The table to delete the record from
 	 * @param ids - An array of ids to delete
-	 * @returns {Promise<boolean>} - Returns true if all requests were successful
+	 * @returns Promise<boolean> - Returns true if all requests were successful
 	 */
 	async deleteRecords(table, ids) {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
