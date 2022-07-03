@@ -87,3 +87,11 @@ Usage:
 ```javascript
 ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]);
 ```
+
+### deleteRecords
+Deletes all Records from a table in the database (very slow, since it deletes all records with individual API calls).
+
+Usage:
+```javascript
+ninox.query("(select TABLE).VALUE");
+```
