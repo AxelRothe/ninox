@@ -15,7 +15,6 @@
   ],
   "author": "Axel Rothe <hello@axelrothe.com>",
   "license": "MIT",
-  "type": "module",
   "dependencies": {
     "axios": "^0.27.2"
   }
