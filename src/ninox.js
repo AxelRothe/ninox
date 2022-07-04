@@ -247,7 +247,7 @@ class Ninox {
 	 *
 	 * @param {String} table - The table to save the record to
 	 * @param {NinoxRecord} records - An array of records to save
-	 * @returns {Promise<boolean>} - Returns true if the request was successful
+	 * @returns {Promise<{success : Boolean, ids: String[]}>}
 	 */
 	async saveRecords(table, records) {
 
@@ -264,7 +264,10 @@ class Ninox {
 			}
 		);
 
-		return result.status === 200;
+		return {
+			success: result.status === 200,
+			ids: result.data.map(i=>i.id),
+		};
 	}
 
 	/**
