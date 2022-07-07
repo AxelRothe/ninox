@@ -367,6 +367,21 @@ class Ninox {
 		return result.data;
 	}
 
+	async getFile(tableId, recordId, fileName) {
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+
+		const result = await axios.get(
+			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/tables/${tableId}/records/${recordId}/files/${fileName}`,
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${this.authKey}`,
+				},
+			}
+		);
+
+		return result.data;
+	}
 
 }
 module.exports = new Ninox();

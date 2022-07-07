@@ -235,3 +235,19 @@ n.query(`(select YOUR_TABLE_NAME['First Name'="${name}" and Age >= ${age}])`).th
 });
 ```
 
+#### `getFile() : Promise<String>`
+Returns the contents of a file from the database.
+
+**Usage:**
+```javascript
+const RECORD_ID = 123;
+const FILE_NAME = "image.png";
+ninox.getFile("YOUR_TABLE_NAME", RECORD_ID, FILE_NAME).then(function(file) {
+    if (file){
+        console.log("success");
+    }
+}).catch(function(err) {
+    console.log(err);
+});
+```
+
