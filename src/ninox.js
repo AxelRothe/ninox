@@ -162,9 +162,10 @@ class Ninox {
 	 * @param table - The table to retrieve the record from
 	 * @param filters - An array of filters to apply to the query (see https://docs.ninox.com/)
 	 * @param fieldsToExtract - use this to trim the fields you want to return
+	 * @param fieldsToExclude
 	 * @returns {Promise<NinoxRecord[]>}
 	 */
-	async getRecords(table, filters = {}, fieldsToExtract = []) {
+	async getRecords(table, filters = {}, fieldsToExtract = [], fieldsToExclude = []) {
 
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
@@ -189,6 +190,11 @@ class Ninox {
 				item.fields = Ninox.extractFields(item, fieldsToExtract);
 			}
 		}
+		if (fieldsToExclude.length > 0) {
+			for (let item of list) {
+				item.fields = Ninox.excludeFields(item, fieldsToExclude);
+			}
+		}
 		return list;
 	}
 
@@ -198,9 +204,10 @@ class Ninox {
 	 * @param table - The table to retrieve the record from
 	 * @param id - The id of the record to retrieve
 	 * @param fieldsToExtract - use this to trim the fields you want to return
+	 * @param fieldsToExclude
 	 * @returns {Promise<NinoxRecord>}
 	 */
-	async getRecord(table, id, fieldsToExtract = []) {
+	async getRecord(table, id, fieldsToExtract = [], fieldsToExclude = []) {
 
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
@@ -218,6 +225,9 @@ class Ninox {
 		if (fieldsToExtract.length > 0) {
 			item.fields = Ninox.extractFields(item, fieldsToExtract);
 		}
+		if (fieldsToExclude.length > 0) {
+			item.fields = Ninox.excludeFields(item, fieldsToExclude);
+		}
 		return item;
 	}
 
@@ -226,6 +236,18 @@ class Ninox {
 
 		for (let item of array) {
 			if (content.fields[item]) {
+				newFields[item] = content.fields[item];
+			}
+		}
+
+		return newFields;
+	}
+
+	static excludeFields(content, array) {
+		let newFields = {};
+
+		for (let item of Object.keys(content.fields)) {
+			if (!array.includes(item)) {
 				newFields[item] = content.fields[item];
 			}
 		}

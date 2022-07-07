@@ -111,7 +111,7 @@ ninox.auth({
 ---
 ## 🔦 Available methods
 
-### `getRecords(tableName : String, filters : Object, trimTo? : String[]) : Promise<NinoxRecord[]>`
+#### `getRecords(tableName : String, filters : Object, extractFields? : String[], excludeFields? : String[]) : Promise<NinoxRecord[]>`
 Retrieves all `NinoxRecords` from the Table that match the filters.
 
 Filters are always exact matches, use ninox.query to search with greater than, less than and other parameters.
@@ -128,13 +128,26 @@ ninox.getRecords(
     ['name', 'age'] // Fields to extract, leave undefined to extract all fields
 );
 
+// or
+ninox.getRecords(
+	'YOUR_TABLE_NAME', // Table name
+	{
+		"First Name": 'John',
+		Age : 21,
+		"Last Name": 'Doe'
+	},
+    [], //extract all fields
+	['Phone'] // but exclude the field Phone
+);
+
+
 // returns all NinoxRecords
 await ninox.getRecords('YOUR_TABLE_NAME').then(records => {
     console.log(records);
 })
 ```
 
-### `getRecord(tableName : String, id : Number, trimTo? : String[]) : Promise<NinoxRecord>`
+#### `getRecord(tableName : String, id : Number, extractFields? : String[], excludeFields? : String[]) : Promise<NinoxRecord>`
 Returns a `NinoxRecord` from a table by id
 
 **Usage:**
@@ -154,7 +167,7 @@ ninox.getRecord("YOUR_TABLE_NAME", 123).then(function(record) {
 )
 ```
 
-### `saveRecords(tableName : String, records : NinoxRecord[]) : Promise<Boolean>`
+#### `saveRecords(tableName : String, records : NinoxRecord[]) : Promise<Boolean>`
 Saves `NinoxRecords` to a table in the database, omitting the id will create a new `NinoxRecord`, with the id will update the `NinoxRecord`
 
 **Usage:**
@@ -179,7 +192,7 @@ ninox.saveRecords("YOUR_TABLE_NAME", [{
 }]);
 ```
 
-### `deleteRecord(tableName : String, id : Number) : Promise<Boolean>`
+#### `deleteRecord(tableName : String, id : Number) : Promise<Boolean>`
 Deletes `NinoxRecords` from a table in the database.
 
 **Usage:**
@@ -190,8 +203,8 @@ ninox.deleteRecord("YOUR_TABLE_NAME", 123).then(function(record) {
 )
 ```
 
-### `deleteRecords(tableName : String, ids : Number[]) : Promise<Boolean>`
-Deletes all `NinoxRecord`s from a table in the database (very slow, since it deletes all `NinoxRecord` with individual API calls).
+#### `deleteRecords(tableName : String, ids : Number[]) : Promise<Boolean>`
+Deletes all `NinoxRecord`s from a table in the database.
 
 **Usage:**
 ```javascript
@@ -200,7 +213,7 @@ ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]).then(function(record) {
     }
 )
 ```
-### `query(tableName : String, query : String) : Promise<Number|String|Array>`
+#### `query(tableName : String, query : String) : Promise<Number|String|Array>`
 Allows you to query the database directly with a NX-Script, which can do greater than, less than and other functions like contain() etc.
 
 **important**: this doesn't allow you to modify the database directly, only read it. Also Ids returned via query() will carry their table prefix (e.g. `"A36"`)
