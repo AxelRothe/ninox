@@ -78,6 +78,8 @@ class Ninox {
 	/**
 	 * @example
 	 * ninox.auth({
+	 *  uri: "https://api.ninox.com",
+	 *  version: "1",
 	 * 	authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
 	 * 	team: "YOUR_TEAM_NAME",
 	 * 	database: "YOUR_DATABASE_NAME",
@@ -93,8 +95,12 @@ class Ninox {
 	 */
 	async auth(options) {
 		if (!options.authKey) throw new Error("authKey is required");
+
 		if (!options.team) throw new Error("team is required");
 		if (!options.database) throw new Error("database is required");
+
+		this.uri = options.uri ? options.uri : "https://api.ninoxdb.de";
+		this.version = options.version ? options.version : "1";
 
 		this.authKey = options.authKey;
 		await this.#getTeams();
@@ -106,7 +112,7 @@ class Ninox {
 
 	async #getTeams(){
 		const response = await axios.get(
-			`https://api.ninox.com/v1/teams/`,
+			`${this.uri}/v${this.version}/teams/`,
 			{
 				method: "get",
 				headers: {
@@ -126,7 +132,7 @@ class Ninox {
 
 	async #getDatabases(){
 		const response = await axios.get(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases`,
 			{
 				method: "get",
 				headers: {
@@ -170,7 +176,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
 		const response = await axios.get(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${
 				this.databaseId
 			}/tables/${table}/records?pages=9999&perPage=9999&filters=${encodeURIComponent(
 				JSON.stringify({ fields: filters })
@@ -212,7 +218,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
 		const response = await axios.get(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
 			{
 				method: "get",
 				headers: {
@@ -276,7 +282,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
 		const result = await axios.post(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records`,
 			records,
 			{
 				headers: {
@@ -303,7 +309,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
 		const result = await axios.delete(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -355,7 +361,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
 		const result = await axios.get(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/query?query=${encodeURIComponent(query)}`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/query?query=${encodeURIComponent(query)}`,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -371,7 +377,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
 		const result = await axios.get(
-			`https://api.ninox.com/v1/teams/${this.teamId}/databases/${this.databaseId}/tables/${tableId}/records/${recordId}/files/${fileName}`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${tableId}/records/${recordId}/files/${fileName}`,
 			{
 				headers: {
 					"Content-Type": "application/json",

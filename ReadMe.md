@@ -42,6 +42,8 @@ const ninox = require('ninoxjs');
 const ninox = require('ninoxjs/index.cjs');
 
 ninox.auth({
+    uri: "https://api.ninoxdb.de", //optional
+    version: "1", //optional
 	authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
 	team: "YOUR_TEAM_NAME",
 	database: "YOUR_DATABASE_NAME",
