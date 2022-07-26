@@ -44,12 +44,12 @@ const ninox = require('ninoxjs/index.cjs');
 ninox.auth({
     uri: "https://api.ninoxdb.de", //optional
     version: "1", //optional
-	authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
-	team: "YOUR_TEAM_NAME",
-	database: "YOUR_DATABASE_NAME",
+    authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    team: "YOUR_TEAM_NAME",
+    database: "YOUR_DATABASE_NAME",
 }).then(() => {
 	console.log("Auth successful");
-	
+
 	ninox.getRecords('YOUR_TABLE_NAME').then(records => {
 		console.log(records);
 	})
@@ -105,6 +105,8 @@ ninox.auth({
 **Example:**
 ```
 {
+    uri: "https://api.ninoxdb.de", //optional
+    version: "1", //optional
     authKey: "xxxxxx-xxxxx-xxxx-xxxx-xxxxxxxxxxxx",
     team: "YOUR_TEAM_NAME",
     database: "YOUR_DATABASE_NAME",
