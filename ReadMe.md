@@ -218,26 +218,51 @@ ninox.deleteRecords("YOUR_TABLE_NAME", [123, 124, 125]).then(function(record) {
 )
 ```
 #### `query(tableName : String, query : String) : Promise<Number|String|Array>`
-Allows you to query the database directly with a NX-Script, which can do greater than, less than and other functions like contain() etc.
 
-**important**: this doesn't allow you to modify the database directly, only read it. Also Ids returned via query() will carry their table prefix (e.g. `"A36"`)
+Allows you to query the database directly with a NX-Script. 
+
+> Note: 
+> This acts the same as a Formula, you can not write data.
 
 **Usage:**
 ```javascript
 let name = "John"
 let age = 21;
-n.query(`(select YOUR_TABLE_NAME['First Name'="${name}" and Age >= ${age}])`).then(function(result) {
-	console.log(result); //['A2','A7', 'A8']
-    const ids = result.map(r => r.replace(/\D/g,'')) //remove the table prefix);
-    
-	n.getRecords('YOUR_TABLE_NAME', ids).then(function(records) {
-		console.log(records);
-	})
-
+n.query(
+`let list := (select YOUR_TABLE_NAME['First Name'="${name}" and Age >= ${age}]);
+ for l in list do
+ {
+    "age": l.Age,
+    "name": l.'First Name'
+ }
+ end;
+`).then(function(result) {
+    console.log(result) // > [{age: 21, name: "John"}]
 }).catch(function(err) {
 	console.log(err);
 });
 ```
+
+#### `exec(query : String) : Promise<Number|String|Array>`
+Allows you to execute NX-Script directly on the database.
+
+**Usage:**
+```javascript
+let name = "John"
+let age = 21;
+n.query(
+`let t := first(select YOUR_TABLE_NAME['First Name'="${name}" and Age >= ${age}]);
+t.Title := "New Title";
+t.Title;
+`).then(function(result) {
+	console.log(result); // > New Title
+}).catch(function(err) {
+	console.log(err);
+});
+```
+
+> Note:
+> This acts the same as a Button. Careful with this one, you can write data.
 
 #### `getFile() : Promise<String>`
 Returns the contents of a file from the database.
