@@ -373,6 +373,23 @@ class Ninox {
 		return result.data;
 	}
 
+	async exec(script) {
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+
+		const result = await axios.post(
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/exec`,
+			{query: script},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${this.authKey}`,
+				},
+			}
+		);
+
+		return result.data;
+	}
+
 	async getFile(tableId, recordId, fileName) {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
 
