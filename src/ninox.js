@@ -173,7 +173,7 @@ class Ninox {
 	 */
 	async getRecords(table, filters = {}, fieldsToExtract = [], fieldsToExclude = []) {
 
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const response = await axios.get(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${
@@ -215,7 +215,7 @@ class Ninox {
 	 */
 	async getRecord(table, id, fieldsToExtract = [], fieldsToExclude = []) {
 
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const response = await axios.get(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
@@ -279,7 +279,7 @@ class Ninox {
 	 */
 	async saveRecords(table, records) {
 
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.post(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records`,
@@ -306,7 +306,7 @@ class Ninox {
 	 * @returns {Promise<boolean>} - Returns true if the request was successful
 	 */
 	async deleteRecord(table, id) {
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.delete(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
@@ -329,7 +329,7 @@ class Ninox {
 	 * @returns Promise<boolean> - Returns true if all requests were successful
 	 */
 	async deleteRecords(table, ids) {
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 		let result = true;
 		for (let id of ids) {
 			result = result && await this.deleteRecord(table, id);
@@ -358,7 +358,7 @@ class Ninox {
 	 * @returns {Promise<Number|String|Array>}
 	 */
 	async query(query) {
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.get(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/query?query=${encodeURIComponent(query)}`,
@@ -374,7 +374,7 @@ class Ninox {
 	}
 
 	async exec(script) {
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.post(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/exec`,
@@ -391,7 +391,7 @@ class Ninox {
 	}
 
 	async getFile(tableId, recordId, fileName) {
-		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call init() first");
+		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.get(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${tableId}/records/${recordId}/files/${fileName}`,
