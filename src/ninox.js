@@ -178,7 +178,7 @@ class Ninox {
 		const response = await axios.get(
 			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${
 				this.databaseId
-			}/tables/${table}/records?pages=9999&perPage=9999&filters=${encodeURIComponent(
+			}/tables/${encodeURIComponent(table)}/records?pages=9999&perPage=9999&filters=${encodeURIComponent(
 				JSON.stringify({ fields: filters })
 			)}`,
 			{
@@ -218,7 +218,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const response = await axios.get(
-			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${encodeURIComponent(table)}/records/${id}`,
 			{
 				method: "get",
 				headers: {
@@ -282,7 +282,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.post(
-			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${encodeURIComponent(table)}/records`,
 			records,
 			{
 				headers: {
@@ -309,7 +309,7 @@ class Ninox {
 		if (!this.databaseId || !this.teamId) throw new Error("Database and team are required. Call auth() first");
 
 		const result = await axios.delete(
-			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${table}/records/${id}`,
+			`${this.uri}/v${this.version}/teams/${this.teamId}/databases/${this.databaseId}/tables/${encodeURIComponent(table)}/records/${id}`,
 			{
 				headers: {
 					"Content-Type": "application/json",
