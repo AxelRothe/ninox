@@ -1,6 +1,6 @@
 {
   "name": "ninoxjs",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "a simple and fast wrapper for the Ninox API, allows executing and querying with NXScript and the REST API",
   "main": "index.js",
   "repository": "https://github.com/AxelRothe/ninox",
